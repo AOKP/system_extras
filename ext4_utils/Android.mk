@@ -31,6 +31,10 @@ LOCAL_STATIC_LIBRARIES += libselinux
 LOCAL_CFLAGS += -DHAVE_SELINUX
 endif # HAVE_SELINUX
 
+ifeq ($(BOARD_SUPPRESS_EMMC_WIPE),true)
+    LOCAL_CFLAGS += -DSUPPRESS_EMMC_WIPE
+endif
+
 include $(BUILD_HOST_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -44,6 +48,10 @@ else
 ifeq ($(HAVE_SELINUX), true)
 LOCAL_STATIC_LIBRARIES += libselinux
 endif # HAVE_SELINUX
+endif
+
+ifeq ($(BOARD_SUPPRESS_EMMC_WIPE),true)
+    LOCAL_CFLAGS += -DSUPPRESS_EMMC_WIPE
 endif
 
 include $(BUILD_HOST_EXECUTABLE)
@@ -87,7 +95,6 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := make_ext4fs_main.c
 LOCAL_MODULE := make_ext4fs
-LOCAL_MODULE_TAGS := optional
 LOCAL_SHARED_LIBRARIES += libext4_utils libz
 
 ifeq ($(HAVE_SELINUX), true)
@@ -95,6 +102,20 @@ LOCAL_C_INCLUDES += external/libselinux/include
 LOCAL_SHARED_LIBRARIES += libselinux
 LOCAL_CFLAGS += -DHAVE_SELINUX
 endif # HAVE_SELINUX
+
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := make_ext4fs_main.c
+LOCAL_MODULE := utility_make_ext4fs
+LOCAL_MODULE_STEM := make_ext4fs
+LOCAL_MODULE_TAGS := optional
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+LOCAL_MODULE_CLASS := UTILITY_EXECUTABLES
+LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
+LOCAL_UNSTRIPPED_PATH := $(PRODUCT_OUT)/symbols/utilities
+LOCAL_STATIC_LIBRARIES += libext4_utils libz libcutils libc
 
 include $(BUILD_EXECUTABLE)
 
