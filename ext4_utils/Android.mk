@@ -121,7 +121,7 @@ ifeq ($(HAVE_SELINUX), true)
   LOCAL_C_INCLUDES += external/libselinux/include
   LOCAL_SHARED_LIBRARIES += libselinux
   LOCAL_CFLAGS += -DHAVE_SELINUX
-endif $ HAV_SELINUX
+endif # HAVE_SELINUX
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
